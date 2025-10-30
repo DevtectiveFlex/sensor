@@ -1,52 +1,16 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
+import { useCardMethods } from '../composables/useCardMethods';
 
 const card = ref<null | HTMLElement>(null);
-const cardSettings = reactive({
-  rotateAngle: 'rotateX(0deg) rotateY(0deg)',
-  transitionStyle: 'transform 0.1s ease-out',
-  shadowAndle: '0px 10px 4px rgba(0,0,0, 0.75)',
-});
 
-function cardRotateHandler(event: MouseEvent): void {
-  if (card.value === null) {
-    console.log('canseled');
-    return;
-  }
-  const rect = card.value.getBoundingClientRect();
-
-  const y = event.clientY - rect.top - rect.height / 2;
-  const x = event.clientX - rect.left - rect.width / 2;
-
-  const rotateX = (y * 1.5) / 5;
-  const rotateY = -x / 2.5;
-
-  cardSettings.transitionStyle = 'transform 0.1s ease-out';
-  cardSettings.rotateAngle = `rotateY(${rotateY}deg) rotateX(${rotateX}deg) scale(1.3)`;
-  cardSettings.shadowAndle = `${rotateY / 2}px ${-rotateX / 2}px 4px rgba(0,0,0, 0.75)`;
-}
-
-function resetRotation(): void {
-  cardSettings.transitionStyle = 'transform 1s ease, box-shadow 1s ease';
-  cardSettings.rotateAngle = 'rotateX(0deg) rotateY(0deg)';
-  cardSettings.shadowAndle = '0px 10px 4px rgba(0,0,0, 0.25)';
-}
-
-function cardDragHandler(event: DragEvent): void {
-  if (card.value) {
-    console.table({ x: event.clientX, y: event.clientY });
-    card.value.style.position = 'absolute';
-    card.value.style.left = `${event.clientX - 140}px`;
-    card.value.style.top = `${event.clientY - 190}px`;
-  }
-}
-
-function dragStartHandler(event: DragEvent): void {
-  const img = new Image();
-  img.src =
-    "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'></svg>";
-  event.dataTransfer?.setDragImage(img, 0, 0);
-}
+const {
+  cardSettings,
+  cardRotateHandler,
+  cardDragHandler,
+  dragStartHandler,
+  resetRotation,
+} = useCardMethods(card);
 </script>
 
 <template>
@@ -54,7 +18,7 @@ function dragStartHandler(event: DragEvent): void {
     ref="card"
     class="game-card"
     :style="{
-      '--shadow-angle': cardSettings.shadowAndle,
+      '--shadow-angle': cardSettings.shadowAngle,
       '--rotate-angle': cardSettings.rotateAngle,
       '--transition-style': cardSettings.transitionStyle,
     }"
