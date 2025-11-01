@@ -81,7 +81,8 @@ const {
 }
 .card__portrait {
   position: relative;
-  top: -25px;
+  top: 30px;
+  left: 10%;
 
   flex-shrink: 0;
 
@@ -96,7 +97,7 @@ const {
   top: 0;
 
   width: 75%;
-  height: 100%;
+  height: 75%;
 
   border-radius: 50%;
 }
