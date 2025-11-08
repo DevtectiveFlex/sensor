@@ -2,6 +2,14 @@
 import { ref } from 'vue';
 import { useCardMethods } from '../composables/useCardMethods';
 
+defineProps<{
+  image: string;
+  description: string;
+  stats: {
+    health: number | string;
+    power: number | string;
+  }
+}>()
 const card = ref<null | HTMLElement>(null);
 
 const {
@@ -31,13 +39,15 @@ const {
     <div class="card__content">
       <div class="card__portrait">
         <img
-          src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2FjMm9ka2NqazdzY3Vvb3d0bDVqcWttemd1MThkdTc3dTUxcjJ3NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gIsyGoDfDi4TSf7SsY/giphy.gif"
+          :src="image"
           draggable="false"
           width="200"
           height="200"
         />
       </div>
-      <div class="card__text">Lorem ipsum dolor sit amet.</div>
+      <div class="card__text">{{ description }}</div>
+      <div class="card__stat card__stat_power">{{stats.power}}</div>
+      <div class="card__stat card__stat_health">{{stats.health}}</div>
     </div>
   </div>
 </template>
@@ -81,7 +91,8 @@ const {
 }
 .card__portrait {
   position: relative;
-  top: -25px;
+  top: 30px;
+  left: 0;
 
   flex-shrink: 0;
 
@@ -96,7 +107,7 @@ const {
   top: 0;
 
   width: 75%;
-  height: 100%;
+  height: 75%;
 
   border-radius: 50%;
 }
@@ -111,5 +122,37 @@ const {
   background-color: rgba(255, 255, 255, 0.25);
 
   overflow: hidden;
+}
+
+.card__stat {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  
+  width: 50px;
+  height: 50px;
+
+  font-size: 24px;
+  font-weight: 700;
+  background-color: gray;
+  border-radius: 50%;
+}
+
+.card__stat_power {
+  position: absolute;
+  bottom: -25px;
+  left: -25px;
+
+  background-color: rgba(238, 201, 78, 0.8);
+  color: white;
+}
+.card__stat_health {
+  position: absolute;
+  bottom: -25px;
+  right: -25px;
+
+  background-color: rgba(240, 44, 44, 0.8);
+  color: white;
 }
 </style>
